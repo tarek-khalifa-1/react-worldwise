@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 
 import styles from "./Form.module.css";
 import Button from "../Button/Button";
-import { useNavigate } from "react-router-dom";
 import { useUrlPosition } from "../../hooks/useUrlPosition";
 import Spinner from "../Spinner/Spinner";
 import Message from "../Message/Message";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useCities } from "../../contexts/CitiesContext";
+import BackButton from "../BackButton/BackButton";
+import { useNavigate } from "react-router-dom";
 
-export function convertToEmoji(countryCode) {
+function convertToEmoji(countryCode) {
   const codePoints = countryCode
     .toUpperCase()
     .split("")
@@ -25,8 +29,12 @@ function Form() {
   const [geocodingError, setGeocodingError] = useState("");
   const navigate = useNavigate();
   const [lat, lng] = useUrlPosition();
+  const { addCity, isLoading, error } = useCities();
 
   useEffect(() => {
+    if (!lat || !lng)
+      return setGeocodingError("Start by clicking somewhere on the map");
+
     async function fetchCity() {
       try {
         setIsLoadingGeocoding(true);
@@ -44,7 +52,6 @@ function Form() {
         setCityName(data.city || data.locality);
         setCountry(data.countryName);
         setEmoji(convertToEmoji(data.countryCode));
-        console.log(cityName, country, emoji);
       } catch (error) {
         console.log(error);
         setGeocodingError(error.message);
@@ -52,33 +59,35 @@ function Form() {
         setIsLoadingGeocoding(false);
       }
     }
-
     fetchCity();
   }, [lat, lng]);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-
-    const obj = {
+    if (!cityName || !date) return;
+    const newCity = {
       cityName,
       country,
-      emoji: "🇵🇹",
-      date: "2027-10-31T15:59:59.138Z",
+      emoji,
+      date,
       notes,
       position: {
         lat,
         lng,
       },
-      id: 73930385,
     };
-    console.log(obj);
+    const hasError = await addCity(newCity);
+    if (!hasError) navigate("/app/cities");
   }
 
   if (isLoadingGeocoding) return <Spinner />;
   if (geocodingError) return <Message message={geocodingError} />;
-
+  if (error) return <Message message={error} />;
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form
+      className={`${styles.form} ${isLoading ? styles.loading : ""}`}
+      onSubmit={handleSubmit}
+    >
       <div className={styles.row}>
         <label htmlFor="cityName">City name</label>
         <input
@@ -91,10 +100,10 @@ function Form() {
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        <input
+        <DatePicker
           id="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
+          selected={date}
+          onChange={(date) => setDate(date)}
         />
       </div>
 
@@ -109,16 +118,7 @@ function Form() {
 
       <div className={styles.buttons}>
         <Button type={"primary"}>Add</Button>
-
-        <Button
-          type={"back"}
-          onClick={(e) => {
-            e.preventDefault();
-            navigate("/app/cities");
-          }}
-        >
-          &larr; Back
-        </Button>
+        <BackButton />
       </div>
     </form>
   );

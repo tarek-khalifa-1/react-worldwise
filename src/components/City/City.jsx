@@ -1,9 +1,9 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styles from "./City.module.css";
 import { useEffect } from "react";
 import { useCities } from "../../contexts/CitiesContext";
-import Button from "../Button/Button";
 import Spinner from "../Spinner/Spinner";
+import BackButton from "../BackButton/BackButton";
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat("en", {
@@ -13,12 +13,9 @@ const formatDate = (date) =>
     weekday: "long",
   }).format(new Date(date));
 
-const BASE_URL = "http://localhost:9000/";
-
 function City() {
   const { id } = useParams();
   const { isLoading, getCity, currentCity } = useCities();
-  const navigate = useNavigate();
 
   useEffect(() => {
     getCity(id);
@@ -60,9 +57,7 @@ function City() {
       </div>
 
       <div>
-        <Button type="back" onClick={() => navigate(-1)}>
-          Back
-        </Button>
+        <BackButton />
       </div>
     </div>
   );

@@ -1,10 +1,14 @@
+import BackButton from "../BackButton/BackButton";
 import styles from "./Message.module.css";
 
 function Message({ message }) {
   return (
-    <p className={styles.message}>
-      <span role="img">👋</span> {message}
-    </p>
+    <div>
+      <p className={styles.message}>
+        <span role="img">👋</span> {message}
+      </p>
+      <BackButton />
+    </div>
   );
 }
 

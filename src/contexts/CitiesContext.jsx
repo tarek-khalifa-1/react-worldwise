@@ -6,6 +6,7 @@ function CitiesProvider({ children }) {
   const [cities, setCeties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentCity, setCurrentCity] = useState({});
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function fetchCities() {
@@ -33,14 +34,67 @@ function CitiesProvider({ children }) {
       const data = await res.json();
       setCurrentCity(data);
     } catch (error) {
-      console.log(error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function addCity(newCity) {
+    try {
+      setIsLoading(true);
+      const exists = cities.some((city) => city.cityName === newCity.cityName);
+      if (exists) {
+        const msg = "You've alread visited this city before";
+        setError(msg);
+        return msg;
+      }
+      const res = await fetch(`/cities`, {
+        method: "POST",
+        body: JSON.stringify(newCity),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) throw new Error("Please try again later");
+      const data = await res.json();
+      setCurrentCity(data);
+      setCeties((cities) => [...cities, data]);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function removeCity(id) {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`/cities/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Please try again later");
+      setCeties((cities) => cities.filter((city) => city.id !== id));
+    } catch (error) {
+      setError(error.message);
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <CitiesContext.Provider value={{ isLoading, cities, getCity, currentCity }}>
+    <CitiesContext.Provider
+      value={{
+        isLoading,
+        error,
+        setError,
+        cities,
+        currentCity,
+        getCity,
+        addCity,
+        removeCity,
+      }}
+    >
       {children}
     </CitiesContext.Provider>
   );
