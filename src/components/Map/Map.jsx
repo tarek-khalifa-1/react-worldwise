@@ -42,11 +42,17 @@ export default function Map() {
 
   return (
     <div className={styles.mapContainer}>
-      {
+      {!geolocationPosition && (
         <Button type="position" onClick={getPosition}>
-          {isLoadingPosition ? "Loading..." : "Use your position"}
+          {isLoadingPosition ? (
+            "Loading..."
+          ) : (
+            <span>
+              <span>Use your position</span>
+            </span>
+          )}
         </Button>
-      }
+      )}
 
       <MapContainer
         center={mapPosition}
@@ -78,7 +84,7 @@ export default function Map() {
 
 function ChangeCenter({ position }) {
   const map = useMap();
-  map.setView(position, 15);
+  map.setView(position, 10);
   return null;
 }
 
