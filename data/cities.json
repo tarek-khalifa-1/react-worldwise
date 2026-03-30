@@ -1,41 +1,40 @@
 {
   "cities": [
     {
-      "cityName": "Balearic Sea",
+      "cityName": "Lisbon",
+      "country": "Portugal",
+      "emoji": "🇵🇹",
+      "date": "2027-10-31T15:59:59.138Z",
+      "notes": "My favorite city so far!",
+      "position": {
+        "lat": 38.727881642324164,
+        "lng": -9.140900099907554
+      },
+      "id": 73930385
+    },
+    {
+      "cityName": "Madrid",
       "country": "Spain",
       "emoji": "🇪🇸",
-      "date": "2026-03-30T21:15:56.489Z",
+      "date": "2027-07-15T08:22:53.976Z",
       "notes": "",
       "position": {
-        "lat": "39.998163944585805",
-        "lng": "0.07965087890625001"
+        "lat": 40.46635901755316,
+        "lng": -3.7133789062500004
       },
-      "id": "S9P8bmoYkEM"
+      "id": 17806751
     },
     {
-      "cityName": "Abu al Maţamir",
-      "country": "Egypt",
-      "emoji": "🇪🇬",
-      "date": "2026-03-30T21:17:52.438Z",
-      "notes": "",
+      "cityName": "Berlin",
+      "country": "Germany",
+      "emoji": "🇩🇪",
+      "date": "2027-02-12T09:24:11.863Z",
+      "notes": "Amazing 😃",
       "position": {
-        "lat": "30.88219073696271",
-        "lng": "30.02151489257813"
+        "lat": 52.53586782505711,
+        "lng": 13.376933665713324
       },
-      "id": "w_tR-1Ixwuk"
-    },
-    {
-      "cityName": "Al ‘Amiriyah",
-      "country": "Egypt",
-      "emoji": "🇪🇬",
-      "date": "2026-03-30T21:18:56.580Z",
-      "notes": "",
-      "position": {
-        "lat": "30.794935252519135",
-        "lng": "29.92401123046875"
-      },
-      "id": "hpIJm-MebHc"
+      "id": 98443197
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }

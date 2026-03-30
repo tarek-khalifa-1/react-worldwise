@@ -29,7 +29,7 @@ function Form() {
   const [geocodingError, setGeocodingError] = useState("");
   const navigate = useNavigate();
   const [lat, lng] = useUrlPosition();
-  const { addCity, isLoading, error } = useCities();
+  const { addCity, isLoading } = useCities();
 
   useEffect(() => {
     if (!lat || !lng)
@@ -53,7 +53,6 @@ function Form() {
         setCountry(data.countryName);
         setEmoji(convertToEmoji(data.countryCode));
       } catch (error) {
-        console.log(error);
         setGeocodingError(error.message);
       } finally {
         setIsLoadingGeocoding(false);
@@ -82,7 +81,6 @@ function Form() {
 
   if (isLoadingGeocoding) return <Spinner />;
   if (geocodingError) return <Message message={geocodingError} />;
-  if (error) return <Message message={error} />;
   return (
     <form
       className={`${styles.form} ${isLoading ? styles.loading : ""}`}

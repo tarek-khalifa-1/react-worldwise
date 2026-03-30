@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   MapContainer,
   TileLayer,
@@ -89,13 +89,10 @@ function ChangeCenter({ position }) {
 }
 
 function DetectClick() {
-  const { setError } = useCities();
-
   const navigate = useNavigate();
 
   useMapEvents({
     click: (e) => {
-      setError("");
       navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
     },
   });
