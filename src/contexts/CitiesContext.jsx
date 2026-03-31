@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useReducer } from "react";
 
+const BASE_URL = "https://69cb2d280b417a19e07a5344.mockapi.io/v1/";
 const initialState = {
   cities: [],
   isLoading: false,
@@ -68,7 +69,7 @@ function CitiesProvider({ children }) {
     async function fetchCities() {
       dispatch({ type: "loading" });
       try {
-        const res = await fetch(`/cities`);
+        const res = await fetch(`${BASE_URL}/cities`);
         if (!res.ok) throw new Error("Can't fetch data");
         const data = await res.json();
         dispatch({ type: "cities/loaded", payload: data });
@@ -84,7 +85,7 @@ function CitiesProvider({ children }) {
     if (id == currentCity.id) return;
     dispatch({ type: "loading" });
     try {
-      const res = await fetch(`/cities/${id}`);
+      const res = await fetch(`${BASE_URL}/cities/${id}`);
       if (!res.ok) throw new Error("Can't fetch data");
       const data = await res.json();
       dispatch({ type: "city/loaded", payload: data });
@@ -97,7 +98,7 @@ function CitiesProvider({ children }) {
     dispatch({ type: "loading" });
 
     try {
-      const res = await fetch(`/cities`, {
+      const res = await fetch(`${BASE_URL}/cities`, {
         method: "POST",
         body: JSON.stringify(newCity),
         headers: {
@@ -116,7 +117,7 @@ function CitiesProvider({ children }) {
     dispatch({ type: "loading" });
 
     try {
-      const res = await fetch(`/cities/${id}`, {
+      const res = await fetch(`${BASE_URL}/cities/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Please try again later");
