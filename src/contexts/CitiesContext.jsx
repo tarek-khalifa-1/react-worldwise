@@ -1,5 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 
 const BASE_URL = "https://69cb2d280b417a19e07a5344.mockapi.io/v1/";
 const initialState = {
@@ -81,18 +87,21 @@ function CitiesProvider({ children }) {
     fetchCities();
   }, []);
 
-  async function getCity(id) {
-    if (id == currentCity.id) return;
-    dispatch({ type: "loading" });
-    try {
-      const res = await fetch(`${BASE_URL}/cities/${id}`);
-      if (!res.ok) throw new Error("Can't fetch data");
-      const data = await res.json();
-      dispatch({ type: "city/loaded", payload: data });
-    } catch (error) {
-      dispatch({ type: "rejected", payload: error.message });
-    }
-  }
+  const getCity = useCallback(
+    async function getCity(id) {
+      if (id == currentCity.id) return;
+      dispatch({ type: "loading" });
+      try {
+        const res = await fetch(`${BASE_URL}/cities/${id}`);
+        if (!res.ok) throw new Error("Can't fetch data");
+        const data = await res.json();
+        dispatch({ type: "city/loaded", payload: data });
+      } catch (error) {
+        dispatch({ type: "rejected", payload: error.message });
+      }
+    },
+    [currentCity.id],
+  );
 
   async function addCity(newCity) {
     dispatch({ type: "loading" });
