@@ -1,31 +1,28 @@
-import { lazy } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "./contexts/FakeAuthContext";
-import AuthRoute from "./middleware/AuthRoute";
-import { CitiesProvider } from "./contexts/CitiesContext";
+import Homepage from "./pages/HomePage/Homepage";
 import AppLayout from "./pages/AppLayout/AppLayout";
+import Login from "./pages/Login/Login";
+import Product from "./pages/Product";
+import Pricing from "./pages/Pricing";
+import PageNotFound from "./pages/PageNotFound";
 import CityList from "./components/CityList/CityList";
 import CountryList from "./components/CountryList/CountryList";
 import City from "./components/City/City";
 import Form from "./components/Form/Form";
-
-// Lazy loading
-const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
-const Product = lazy(() => import("./pages/Product"));
-const Pricing = lazy(() => import("./pages/Pricing"));
-const PageNotFound = lazy(() => import("./pages/PageNotFound"));
-const Login = lazy(() => import("./pages/Login/Login"));
-
+import { CitiesProvider } from "./contexts/CitiesContext";
+import { AuthProvider } from "./contexts/FakeAuthContext";
+import AuthRoute from "./middleware/AuthRoute";
 function App() {
   return (
     <AuthProvider>
       <CitiesProvider>
         <BrowserRouter>
           <Routes>
-            <Route index element={<HomePage />} />
+            <Route index element={<Homepage />} />
             <Route path="/product" element={<Product />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/login" element={<Login />} />
+
             <Route
               path="/app"
               element={
